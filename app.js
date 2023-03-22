@@ -176,9 +176,9 @@ app.route("/transaction")
     })
 
 
-app.route("/transaction/:id_transaction")
+app.route("/transaction/:idTransaction")
     .get((req, res) => {
-        const idTransaction=req.params.id_transaction
+        const idTransaction=req.params.idTransaction
         db.query(`SELECT item.item_name,
         item_transaksi.deskripsi_item,
         item_transaksi.qty,
@@ -188,6 +188,35 @@ app.route("/transaction/:id_transaction")
         WHERE fk_id_transaksi =${idTransaction}`, (err, row, ield) => {
             if (err) throw err
             else res.send(row)
+        })
+    })
+
+    .put((req, res) => {
+        const idTransaction = req.params.idTransaction
+        const updateTotalAmount = req.body.updateTotalAmount
+        const updateCreatedBy = req.body.updateCreatedBy
+        const updateSalesNumber =req.body.updateSalesNumber
+        const updateStatus = req.body.updateStatus
+        
+        const currentDate = new Date()
+        const dd =currentDate.getDate()
+        const mm =currentDate.getMonth()+1
+        const yyyy =currentDate.getFullYear()
+
+        const updatedDate = `${yyyy}-${mm}-${dd}`
+        db.query(`UPDATE transaksi
+        SET transaksi.total_pembelian =${updateTotalAmount},
+        transaksi.fk_id_user=${updateCreatedBy},
+        transaksi.nomor_so='${updateSalesNumber}',
+        transaksi.fk_id_status=${updateStatus},
+        transaksi.updated_date='${updatedDate}'
+        WHERE transaksi.id_transaksi =${idTransaction}`, (err, result) => {
+            if (err) throw err
+            else response(
+                200,
+                `transaksi nomor ${idTransaction} berhasil diubah`,
+                res
+            )
         })
     })
 
