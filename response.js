@@ -1,16 +1,16 @@
-const response = (
+
+const responseUpdate = (
     statusCode,
+    result,
     message,
     res
 ) => {
     res.status(statusCode).json({
-        data: data,
+        result: result,
         message: message,
-        statusCode: statusCode
+        statusCode:statusCode
     })
 }
-
-module.exports = response
 
 const responseTransactionList = (
     statusCode,
@@ -27,4 +27,8 @@ const responseTransactionList = (
     })
 }
 
-module.exports = responseTransactionList
+
+module.exports = {
+    responeUpdate: responseUpdate,
+    responseTransactionList:responseTransactionList
+}
